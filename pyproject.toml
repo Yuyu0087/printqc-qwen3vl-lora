@@ -1,0 +1,36 @@
+[build-system]
+requires = ["setuptools>=80,<82", "wheel>=0.45,<1"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "printqc-qwen3vl-lora"
+version = "0.1.0"
+description = "Experimental paired-image under-extrusion classification with Qwen3-VL and a LoRA adapter"
+readme = "README.md"
+requires-python = ">=3.11,<3.12"
+dependencies = [
+  "accelerate==1.11.0",
+  "filelock>=3.18,<4",
+  "huggingface_hub==1.25.1",
+  "httpx>=0.28,<0.29",
+  "jsonschema>=4.23,<5",
+  "peft==0.18.1",
+  "Pillow>=11,<13",
+  "platformdirs>=4.3,<5",
+  "safetensors>=0.6,<1",
+  "transformers==5.8.0",
+]
+
+[project.optional-dependencies]
+quantization = ["bitsandbytes==0.50.0"]
+test = ["build>=1.2,<2", "pytest>=8.4,<9", "pytest-cov>=6,<8"]
+
+[project.scripts]
+printqc-infer = "printqc.cli:main"
+
+[tool.setuptools.package-data]
+printqc = ["resources/*.json"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra"
