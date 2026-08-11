@@ -5,6 +5,7 @@ import json
 from pathlib import Path
 import sys
 
+from printqc.artifacts import ArtifactDownloadError, ArtifactIntegrityError
 from printqc.images import ImageInputError
 from printqc.inference import run_inference
 from printqc.parsing import ParseError, abstained_result, parse_model_output
@@ -43,6 +44,9 @@ def main(argv: list[str] | None = None) -> int:
     except ImageInputError as exc:
         _write_json(output, abstained_result(str(exc)))
         return 2
+    except (ArtifactDownloadError, ArtifactIntegrityError) as exc:
+        _write_json(output, abstained_result(str(exc)))
+        return 3
     except ParseError as exc:
         _write_json(output, abstained_result(str(exc)))
         return 5

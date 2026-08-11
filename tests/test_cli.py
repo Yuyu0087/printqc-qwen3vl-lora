@@ -2,6 +2,7 @@ import json
 
 from PIL import Image
 
+from printqc.artifacts import ArtifactDownloadError
 from printqc.cli import main
 
 
@@ -39,3 +40,24 @@ def test_cli_parse_failure_exits_5(tmp_path, monkeypatch):
     data = json.loads(output.read_text(encoding="utf-8"))
     assert data["label"] is None
     assert data["abstained"] is True
+
+
+def test_cli_adapter_cache_failure_exits_3(tmp_path, monkeypatch):
+    phone = tmp_path / "phone.jpg"
+    top = tmp_path / "top.jpg"
+    output = tmp_path / "result.json"
+    Image.new("RGB", (8, 8), "white").save(phone)
+    Image.new("RGB", (8, 8), "black").save(top)
+
+    def fail_cache(**_kwargs):
+        raise ArtifactDownloadError("adapter cache is missing and offline mode is enabled")
+
+    monkeypatch.setattr("printqc.cli.run_inference", fail_cache)
+
+    code = main(["--phone-image", str(phone), "--top-image", str(top), "--output", str(output), "--offline"])
+
+    assert code == 3
+    data = json.loads(output.read_text(encoding="utf-8"))
+    assert data["label"] is None
+    assert data["abstained"] is True
+    assert "adapter cache is missing" in data["error"]
