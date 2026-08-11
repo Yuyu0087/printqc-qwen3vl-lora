@@ -12,8 +12,8 @@ def main() -> int:
     parser = argparse.ArgumentParser(description="Run a local smoke inference on a gold_pilot sample.")
     parser.add_argument("--gold", required=True)
     parser.add_argument("--sample-index", type=int, default=0)
-    parser.add_argument("--base-model", default="/home/zzzero1/models/Qwen3-VL-4B-Instruct")
-    parser.add_argument("--adapter-dir", default="/home/zzzero1/training_outputs/qwen3vl-4b/lora/printqc_classification")
+    parser.add_argument("--base-model", required=True)
+    parser.add_argument("--adapter-dir", required=True)
     parser.add_argument("--output", required=True)
     args = parser.parse_args()
 
