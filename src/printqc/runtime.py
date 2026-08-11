@@ -31,18 +31,22 @@ def preflight_cuda() -> dict[str, Any]:
 
 def load_runtime(base_model: str, adapter_dir: str | Path, revision: str | None = None) -> PrintQCRuntime:
     preflight_cuda()
+    base_is_local = Path(base_model).exists()
     processor = AutoProcessor.from_pretrained(
         adapter_dir,
         trust_remote_code=True,
         local_files_only=Path(adapter_dir).exists(),
     )
-    model = AutoModelForImageTextToText.from_pretrained(
-        base_model,
-        revision=revision,
-        torch_dtype=torch.bfloat16,
-        device_map="auto",
-        trust_remote_code=True,
-    )
+    model_kwargs = {
+        "revision": revision,
+        "device_map": "auto",
+        "trust_remote_code": True,
+        "local_files_only": base_is_local,
+    }
+    try:
+        model = AutoModelForImageTextToText.from_pretrained(base_model, dtype="auto", **model_kwargs)
+    except TypeError:
+        model = AutoModelForImageTextToText.from_pretrained(base_model, torch_dtype="auto", **model_kwargs)
     model = PeftModel.from_pretrained(model, str(adapter_dir))
     model.eval()
     return PrintQCRuntime(processor=processor, model=model)

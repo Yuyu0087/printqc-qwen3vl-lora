@@ -15,6 +15,7 @@ def test_readme_states_public_scope_without_overclaiming():
         "not hosted on Hugging Face",
         "phone side-view image first",
         "top-down printer image second",
+        "printqc-paired-classification-zh-v1",
         "fail",
         "printer control",
     ]

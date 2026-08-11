@@ -1,15 +1,5 @@
 PROMPT_ID = "printqc-paired-classification-zh-v1"
 
 PAIRED_CLASSIFICATION_PROMPT = """
-You are evaluating two images from the same FDM 3D-print layer. The first image is a phone side view. The second image is a top-down printer view.
-
-Classify only the overall paired-image result as one of:
-- normal
-- under_extrusion
-- unsure
-
-Use severity 0 for normal, 1 for mild, 2 for moderate, and 3 for severe. If the evidence is weak, conflicting, blurry, occluded, or insufficient, use label "unsure".
-
-Return strict JSON only:
-{"label":"normal|under_extrusion|unsure","severity":0,"confidence":0.0,"evidence":"short visual evidence"}
+这是同一个3D打印件同一层的两张图:第一张是手机侧拍高清图,第二张是机载俯拍图。请综合两个视角判断该层是否存在欠挤出(under-extrusion)缺陷。输出整件类别 normal/under_extrusion/unsure 与严重度 severity(0无/1轻/2中/3重),并简述依据。
 """.strip()

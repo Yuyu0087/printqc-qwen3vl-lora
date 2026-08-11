@@ -13,7 +13,10 @@ _LABELS = {"normal", "under_extrusion", "unsure"}
 
 
 def parse_model_output(text: str) -> dict[str, Any]:
-    data = _load_json_object(text)
+    try:
+        data = _load_json_object(text)
+    except ParseError:
+        return _parse_trained_chinese_text(text)
     label = data.get("label")
     if label not in _LABELS:
         raise ParseError("label must be normal, under_extrusion, or unsure")
@@ -35,6 +38,34 @@ def parse_model_output(text: str) -> dict[str, Any]:
         "severity": severity,
         "confidence": max(0.0, min(1.0, confidence)),
         "evidence": str(data.get("evidence", "")),
+        "abstained": False,
+    }
+
+
+def _parse_trained_chinese_text(text: str) -> dict[str, Any]:
+    label_match = re.search(r"类别\s*[:：]\s*([^;；。,\n]+)", text)
+    severity_match = re.search(r"严重度\s*[:：].*?([0-3])", text)
+    evidence_match = re.search(r"依据\s*[:：]\s*(.+)", text, flags=re.S)
+    if not label_match or not severity_match:
+        raise ParseError("model output did not contain JSON or the trained Chinese text format")
+
+    raw_label = label_match.group(1)
+    if any(token in raw_label for token in ("欠挤出", "under", "Under")):
+        label = "under_extrusion"
+    elif any(token in raw_label for token in ("正常", "无缺陷", "normal", "Normal")):
+        label = "normal"
+    elif any(token in raw_label for token in ("不确定", "unsure", "Unsure")):
+        label = "unsure"
+    else:
+        raise ParseError("label must be normal, under_extrusion, or unsure")
+
+    severity = int(severity_match.group(1))
+    evidence = evidence_match.group(1).strip() if evidence_match else ""
+    return {
+        "label": label,
+        "severity": severity,
+        "confidence": 0.0,
+        "evidence": evidence,
         "abstained": False,
     }
 
