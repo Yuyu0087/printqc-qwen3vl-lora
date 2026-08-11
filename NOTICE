@@ -1,0 +1,3 @@
+PrintQC Qwen3-VL LoRA is an experimental release package for paired-image 3D-print quality classification.
+
+This project uses Qwen, Transformers, PEFT, PyTorch, qwen-vl-utils, and LLaMA-Factory-compatible training conventions. Review those projects' licenses and model terms before redistribution or commercial use.

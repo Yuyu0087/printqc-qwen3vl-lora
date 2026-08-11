@@ -1,0 +1,12 @@
+{
+  "adapter_asset_sha256": "4c200a8df5af72aecaf8e95335611c3b1ca7fe31373367e59e9113f0ecaebd79",
+  "adapter_asset_size": 62793496,
+  "adapter_asset_url": "https://github.com/Yuyu0087/printqc-qwen3vl-lora/releases/download/v0.1.0/printqc-qwen3vl-lora-adapter-v0.1.0.zip",
+  "adapter_tensor_sha256": "8076fab36711b4a5e6fcf56a73eaf988b2110346b73c6b9e46612fade621bcd0",
+  "base_model": "Qwen/Qwen3-VL-4B-Instruct",
+  "base_revision": "ebb281ec70b05090aa6165b016eac8ec08e71b17",
+  "model_version": "0.1.0",
+  "processor_source": "adapter",
+  "prompt_id": "printqc-paired-classification-zh-v1",
+  "schema_version": "1.0"
+}

@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "abstained": { "type": "boolean" },
+    "confidence": { "maximum": 1.0, "minimum": 0.0, "type": "number" },
+    "error": { "type": "string" },
+    "evidence": { "type": "string" },
+    "label": { "enum": ["normal", "under_extrusion", "unsure", null] },
+    "severity": { "enum": [0, 1, 2, 3, null] }
+  },
+  "required": ["label", "severity", "confidence", "evidence", "abstained"],
+  "type": "object"
+}

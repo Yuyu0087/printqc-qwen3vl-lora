@@ -1,0 +1,1 @@
+{"messages":[{"role":"user","content":"Classify this paired 3D-print layer."},{"role":"assistant","content":"{\"label\":\"normal\",\"severity\":0,\"confidence\":0.8,\"evidence\":\"continuous surface paths\"}"}],"images":["/path/to/private/phone.jpg","/path/to/private/top.jpg"]}

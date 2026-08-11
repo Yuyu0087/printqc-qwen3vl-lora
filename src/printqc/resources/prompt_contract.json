@@ -1,0 +1,6 @@
+{
+  "image_order": ["phone", "top"],
+  "labels": ["normal", "under_extrusion", "unsure"],
+  "prompt_id": "printqc-paired-classification-zh-v1",
+  "severity": [0, 1, 2, 3]
+}

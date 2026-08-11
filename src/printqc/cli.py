@@ -15,12 +15,28 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--phone-image", required=True, help="Path to the phone side-view image.")
     parser.add_argument("--top-image", required=True, help="Path to the top-down printer image.")
     parser.add_argument("--output", required=True, help="Path to write result JSON.")
+    parser.add_argument("--base-model", default="Qwen/Qwen3-VL-4B-Instruct", help="Base model ID or local path.")
+    parser.add_argument("--base-revision", default=None, help="Pinned Hugging Face base revision.")
+    parser.add_argument("--adapter-dir", default=None, help="Local extracted PEFT adapter directory.")
+    parser.add_argument("--manifest", default=None, help="Release manifest path for automatic adapter download.")
+    parser.add_argument("--cache-dir", default=None, help="PrintQC cache directory.")
+    parser.add_argument("--max-new-tokens", type=int, default=256)
     parser.add_argument("--offline", action="store_true", help="Use only already cached model assets.")
     args = parser.parse_args(argv)
 
     output = Path(args.output)
     try:
-        raw = run_inference(phone_image=args.phone_image, top_image=args.top_image, offline=args.offline)
+        raw = run_inference(
+            phone_image=args.phone_image,
+            top_image=args.top_image,
+            offline=args.offline,
+            base_model=args.base_model,
+            base_revision=args.base_revision,
+            adapter_dir=args.adapter_dir,
+            manifest_path=args.manifest,
+            cache_root=args.cache_dir,
+            max_new_tokens=args.max_new_tokens,
+        )
         result = parse_model_output(raw)
         _write_json(output, result)
         return 0

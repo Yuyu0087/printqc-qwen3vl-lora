@@ -1,0 +1,10 @@
+{
+  "printqc_example": {
+    "file_name": "dataset_example.jsonl",
+    "formatting": "sharegpt",
+    "columns": {
+      "messages": "messages",
+      "images": "images"
+    }
+  }
+}
