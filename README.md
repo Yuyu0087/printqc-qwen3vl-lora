@@ -6,7 +6,7 @@ This project is a GitHub-only release package. The program downloads the officia
 
 ## Scope
 
-- Status: experimental v0.1.0 candidate.
+- Status: experimental v0.1.0.
 - Supported runtime: WSL2/Linux, Python 3.11, NVIDIA CUDA.
 - Tested local stack: RTX 5070, torch 2.12.0+cu130, CUDA 13.0, bitsandbytes 0.50.0.
 - Task: paired-image classification for `normal`, `under_extrusion`, or `unsure`.
@@ -69,11 +69,11 @@ Training materials are in `training/`. v0.1.0 provides a minimal dataset example
 
 The public interface is English. The internal prompt contract is fixed as `printqc-paired-classification-zh-v1` for reproducibility of this trained adapter.
 
-## Release Gate
+## v0.1.0 Verification
 
-This repository must remain private until:
+Before the public v0.1.0 release, the maintainer verified:
 
 - The GitHub Release asset round-trip passes.
 - The pinned Hugging Face base revision is proven equivalent to the trained local ModelScope base.
 - A real first-download Hugging Face base inference passes while the repository is still private.
-- The license is explicitly approved.
+- Apache-2.0 licensing is explicitly approved.

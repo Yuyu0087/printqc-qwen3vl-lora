@@ -1,4 +1,5 @@
 from pathlib import Path
+import tomllib
 
 
 def test_readme_states_public_scope_without_overclaiming():
@@ -29,3 +30,12 @@ def test_readme_does_not_claim_accuracy_or_native_windows():
     banned = ["accuracy: 0.", "f1:", "supports native windows", "supports cpu"]
     for phrase in banned:
         assert phrase not in readme
+
+
+def test_apache_2_license_is_declared_and_present():
+    license_text = Path("LICENSE").read_text(encoding="utf-8")
+    pyproject = tomllib.loads(Path("pyproject.toml").read_text(encoding="utf-8"))
+
+    assert "Apache License" in license_text
+    assert "Version 2.0, January 2004" in license_text
+    assert pyproject["project"]["license"] == "Apache-2.0"
