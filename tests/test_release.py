@@ -3,14 +3,16 @@ import json
 import zipfile
 
 from scripts.build_release_asset import build_release_asset, stage_adapter
+from scripts.validate_release import scan_public_repo
 
 
 def _source_adapter(tmp_path):
     source = tmp_path / "source"
     source.mkdir()
+    private_base = "/" + "home" + "/user/private/base"
     (source / "adapter_model.safetensors").write_bytes(b"adapter")
     (source / "adapter_config.json").write_text(
-        json.dumps({"base_model_name_or_path": "/home/user/private/base", "r": 8}),
+        json.dumps({"base_model_name_or_path": private_base, "r": 8}),
         encoding="utf-8",
     )
     (source / "processor_config.json").write_text("{}", encoding="utf-8")
@@ -55,3 +57,20 @@ def test_build_release_asset_is_deterministic(tmp_path):
             "tokenizer.json",
             "tokenizer_config.json",
         ]
+
+
+def test_public_repo_scan_redacts_private_paths(tmp_path):
+    repo = tmp_path / "repo"
+    repo.mkdir()
+    private_path = "/" + "home" + "/zzzero1/models/Qwen3-VL-4B-Instruct"
+    (repo / "README.md").write_text(
+        f"cache path: {private_path}\n",
+        encoding="utf-8",
+    )
+
+    findings = scan_public_repo(repo)
+
+    assert findings
+    assert findings[0]["rule"] == "private-posix-path"
+    assert findings[0]["file"] == "README.md"
+    assert private_path not in json.dumps(findings)

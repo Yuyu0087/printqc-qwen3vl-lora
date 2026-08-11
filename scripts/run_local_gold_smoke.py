@@ -13,6 +13,7 @@ def main() -> int:
     parser.add_argument("--gold", required=True)
     parser.add_argument("--sample-index", type=int, default=0)
     parser.add_argument("--base-model", required=True)
+    parser.add_argument("--base-revision", default=None)
     parser.add_argument("--adapter-dir", required=True)
     parser.add_argument("--output", required=True)
     args = parser.parse_args()
@@ -23,6 +24,7 @@ def main() -> int:
         phone_image=row["phone_path_wsl"],
         top_image=row["top_path_wsl"],
         base_model=args.base_model,
+        base_revision=args.base_revision,
         adapter_dir=args.adapter_dir,
         max_new_tokens=128,
     )
